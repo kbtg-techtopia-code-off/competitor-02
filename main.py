@@ -1,32 +1,44 @@
 # write  a rock-paper-scissors game
 import random
+
 def get_user_choice():
-    # print("Choose an option:")
-    # print("Rock")
-    # print("Paper")
-    # print("Scissors")
-    choice = input("Please input your choice: ")
-    choices = {"Rock":1, "Paper":2,  "Scissors":3}
+    print("Choose an option:")
+    print("1. Rock")
+    print("2. Paper")
+    print("3. Scissors")
+    print("4. Lizard")
+    print("5. Spock")
+
+    choice = input("Please input your choice: ").title()
+    choices = {"Rock":1, "Paper":2, "Scissors":3, "Lizard":4, "Spock":5}
     
-    while choice not in ['Rock', 'Paper', 'Scissors']:
+    while choice not in choices:
         print("Invalid. Please choose again.")
-        choice = input("Please input your choice: ")
+        choice = input("Please input your choice (Rock, Paper, Scissors, Lizard, Spock): ")
 
     return choices[choice]
 
 def get_computer_choice():
-    return random.randint(1, 3)
+    return random.randint(1, 5)
 
 def determine_winner(user, computer):
     if user == computer:
         return "draw"
-    if (user == 1 and computer == 3) or (user == 2 and computer == 1) or (user == 3 and computer == 2):
+    
+    winning_combinations = [
+        (1, 3), (1, 4),  # Rock crushes Scissors, Rock crushes Lizard
+        (2, 1), (2, 5),  # Paper covers Rock, Paper disproves Spock
+        (3, 2), (3, 4),  # Scissors cuts Paper, Scissors decapitates Lizard
+        (4, 2), (4, 5),  # Lizard eats Paper, Lizard poisons Spock
+        (5, 1), (5, 3)   # Spock smashes Rock, Spock smashes Scissors
+    ]
+
+    if (user, computer) in winning_combinations:
         return "user"
     return "computer"
 
 def main():
-    choices = {"Rock":1, "Paper":2,  "Scissors":3}
-    comp_choices = {1: "Rock", 2: "Paper", 3: "Scissors"}
+    comp_choices = {1: "Rock", 2: "Paper", 3: "Scissors", 4: "Lizard", 5: "Spock"}
     wins = 0
     losses = 0
     games_played = 0
@@ -35,8 +47,8 @@ def main():
         user_choice = get_user_choice()
         computer_choice = get_computer_choice()
 
-        print(f"\nThe computer chose: {user_choice}")
-        print(f"The Player chose: {comp_choices[computer_choice]}")
+        print(f"\nYou chose: {comp_choices[user_choice]}")
+        print(f"The computer chose: {comp_choices[computer_choice]}")
 
         winner = determine_winner(user_choice, computer_choice)
 
@@ -54,8 +66,7 @@ def main():
         print(f"Losses: {losses}")
         print(f"Games played: {games_played}")
         print("====================================")
-        print("")
-
+        
         # play_again = input("\nPlay again? (yes/no): ").lower().strip()
         # if play_again != "yes":
         #     break
